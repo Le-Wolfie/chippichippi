@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "idkyet",
+  "version": "1.0",
+
+  "description": "turns every instance of an image and video into a specific GIF",
+
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["chipi.js"]
+    }
+  ]
+}
