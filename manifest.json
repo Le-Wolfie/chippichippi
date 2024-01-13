@@ -3,7 +3,7 @@
   "name": "chippichippi",
   "version": "1.0",
 
-  "description": "turns every instance of an image and video into the funy chipi cat",
+  "description": "turns every image and video currently visible into the funy cat",
 
   "permissions": ["activeTab"],
   "browser_action": {
