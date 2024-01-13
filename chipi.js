@@ -1,51 +1,42 @@
-const chippi = "https://raw.githubusercontent.com/youssef-attai/chippichippi/main/gif/chip.gif";
+const chippi =
+  "https://raw.githubusercontent.com/Le-Wolfie/chippichippi/main/gif/chip.gif";
 
-function main() {
-  var allImageElements = document.querySelectorAll('img, [style*="background-image"]');
+function replaceImage(img) {
+  img.src = chippi;
+}
 
-  allImageElements.forEach(function(element) {
-      // Check if it's an <img> element
-      if (element.tagName === 'IMG') {
-          // Change the src attribute for <img> elements
-          element.src = chippi;
-      } else {
-          // Change the background image for other elements
-          element.style.backgroundImage = `url(${chippi})`;
-      }
+function handleIntersection(entries, observer) {
+  entries.forEach(function (entry) {
+    if (entry.isIntersecting) {
+      // Introduce a small delay using setTimeout
+      setTimeout(function () {
+        replaceImage(entry.target);
+        observer.unobserve(entry.target);
+      }, 100); // Adjust the delay time (in milliseconds) as needed
+    }
   });
 }
 
-// main();
+var observer = new IntersectionObserver(handleIntersection, { threshold: 0.2 });
 
-// Function to replace images
-function replaceImages(images) {
-    images.forEach(function(img) {
-      // if (!img.getAttribute('data-chippichippied')) {
-          // Replace the image source or background image here
-          img.src = chippi;
-          // Or for background images: img.style.backgroundImage = 'url("path/to/your/new/image.jpg")';
-        // Mark the image as replaced
-      //   img.setAttribute('data-chippichippied', 'true');
-      // }
-    });
-}
-
-// Create a MutationObserver to watch for changes in the DOM
-var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-        // Check if nodes were added to the DOM
-        if (mutation.addedNodes.length > 0) {
-            // Select all images in the added nodes
-            var newImages = document.querySelectorAll('img, [style*="background-image"]', mutation.target);
-            // Replace the images
-            replaceImages(newImages);
-        }
-    });
+document.querySelectorAll("img").forEach(function (img) {
+  observer.observe(img);
 });
 
-// Start observing the entire document and subtree
-observer.observe(document, { subtree: true, childList: true });
+var mutationObserver = new MutationObserver(function (mutations) {
+  mutations.forEach(function (mutation) {
+    if (mutation.addedNodes.length > 0) {
+      mutation.addedNodes.forEach(function (node) {
+        if (node.tagName === "IMG") {
+          observer.observe(node);
+        } else {
+          node.querySelectorAll("img").forEach(function (img) {
+            observer.observe(img);
+          });
+        }
+      });
+    }
+  });
+});
 
-// Initial replacement when the page loads
-replaceImages(document.querySelectorAll('img, [style*="background-image"]'));
-
+mutationObserver.observe(document, { subtree: true, childList: true });
