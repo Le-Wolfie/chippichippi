@@ -1,42 +1,41 @@
 const chippi =
   "https://raw.githubusercontent.com/Le-Wolfie/chippichippi/main/gif/chip.gif";
 
-function replaceImage(img) {
-  img.src = chippi;
-}
+function replaceImages() {
+  // Replace img tags
+  var imgElements = document.querySelectorAll("img");
+  imgElements.forEach(function (img) {
+    // Preserve aspect ratio and set width and height
+    img.style.width = img.clientWidth + "px";
+    img.style.height = img.clientHeight + "px";
+    img.src = chippi;
+  });
 
-function handleIntersection(entries, observer) {
-  entries.forEach(function (entry) {
-    if (entry.isIntersecting) {
-      // Introduce a small delay using setTimeout
-      setTimeout(function () {
-        replaceImage(entry.target);
-        observer.unobserve(entry.target);
-      }, 100); // Adjust the delay time (in milliseconds) as needed
-    }
+  // Replace video tags
+  var videoElements = document.querySelectorAll("video");
+  videoElements.forEach(function (video) {
+    // Preserve aspect ratio and set width and height
+    video.style.width = video.clientWidth + "px";
+    video.style.height = video.clientHeight + "px";
+
+    video.poster = chippi;
+    video.src = chippi;
+  });
+
+  // Replace background images added via CSS
+  var elementsWithBackground = document.querySelectorAll(
+    "[style*='background-image']"
+  );
+  elementsWithBackground.forEach(function (element) {
+    // Set background size to cover and background repeat to no-repeat
+    element.style.backgroundSize = "cover";
+    element.style.backgroundRepeat = "no-repeat";
+    element.style.backgroundImage = `url(${chippi})`;
   });
 }
 
-var observer = new IntersectionObserver(handleIntersection, { threshold: 0.2 });
-
-document.querySelectorAll("img").forEach(function (img) {
-  observer.observe(img);
+browser.runtime.onMessage.addListener(function (message) {
+  if (message.action === "replaceImages") {
+    replaceImages();
+  }
 });
-
-var mutationObserver = new MutationObserver(function (mutations) {
-  mutations.forEach(function (mutation) {
-    if (mutation.addedNodes.length > 0) {
-      mutation.addedNodes.forEach(function (node) {
-        if (node.tagName === "IMG") {
-          observer.observe(node);
-        } else {
-          node.querySelectorAll("img").forEach(function (img) {
-            observer.observe(img);
-          });
-        }
-      });
-    }
-  });
-});
-
-mutationObserver.observe(document, { subtree: true, childList: true });

@@ -5,6 +5,11 @@
 
   "description": "turns every instance of an image and video into a specific GIF",
 
+  "permissions": ["activeTab"],
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+
   "content_scripts": [
     {
       "matches": ["*://*/*"],
