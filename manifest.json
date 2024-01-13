@@ -1,13 +1,18 @@
 {
   "manifest_version": 2,
-  "name": "idkyet",
+  "name": "chippichippi",
   "version": "1.0",
 
-  "description": "turns every instance of an image and video into a specific GIF",
+  "description": "turns every instance of an image and video into the funy chipi cat",
 
   "permissions": ["activeTab"],
   "browser_action": {
     "default_popup": "popup.html"
+  },
+
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
   },
 
   "content_scripts": [
