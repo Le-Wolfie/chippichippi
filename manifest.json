@@ -10,6 +10,10 @@
     "default_popup": "popup.html"
   },
 
+  "icons": {
+    "48": "icon/chippi.svg"
+  },
+
   "background": {
     "scripts": ["background.js"],
     "persistent": true
